@@ -12,7 +12,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    /*justify-content: space-around;*/
     border: red solid 2px;
     height: 600px;
     width: 400px;
@@ -21,7 +20,7 @@
 .Display {
     border: blue dotted 2px;
     height: 110px;
-    width: 360px;
+    width: 350px;
     margin-top: 20px;
     font-size: 50px;
     text-align: end;
@@ -30,12 +29,13 @@
 
 
 .Sets {
-    width: 360px;
+    width: 350px;
     height: 50px;
     margin-top: 35px;
     margin-bottom: 35px;
     border: solid red 2px;
     display: flex;
+    justify-content: space-between;
 }
 
 
@@ -64,5 +64,23 @@
 
 .PlusAndEqual button {
     height: 130px;
+}
+
+.RoundAndDoz button {
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+
+}
+
+.Indicators {
+    display: flex;
+    justify-content: space-around;
+}
+
+.OnOff button {
+    border-radius: 50%;
+    margin-left: 40px;
 }
 

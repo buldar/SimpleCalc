@@ -1,19 +1,48 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './App.css';
 
 export const App = () => {
 
+    let [display, setDisplay] = useState('0')
 
 
     return (
         <div className="App">
-            <div className='Tittle'><h1>I AM CALCULATOR</h1></div>
+            <div className='Tittle'><h1>I AM SIMPLE CALCULATOR</h1></div>
             <div className='Calc'>
-                <div className='Display'><span>1234567890</span></div>
+                <div className='Display'>
+                    <span>{display}</span>
+                </div>
                 <div className='Sets'>
-                    <div><button>round</button></div>
-                    <div><button>ON|OFF</button></div>
-                    <div><button>doz</button></div>
+                    <div className='RoundAndDoz'>
+                        <div className='Indicators'>
+                            <div>↓</div>
+                            <div>4/5</div>
+                            <div>↑</div>
+                        </div>
+                        <div>
+                            <button/>
+                            <button/>
+                            <button/>
+                        </div>
+                    </div>
+                    <div className='OnOff'><button>ON</button></div>
+                    <div className='RoundAndDoz'>
+                        <div className='Indicators'>
+                            <div>A</div>
+                            <div>0</div>
+                            <div>2</div>
+                            <div>3</div>
+                            <div>F</div>
+                        </div>
+                        <div>
+                            <button/>
+                            <button/>
+                            <button/>
+                            <button/>
+                            <button/>
+                        </div>
+                    </div>
                 </div>
                 <div className='Functional'>
                     <div><button>MC</button></div>
