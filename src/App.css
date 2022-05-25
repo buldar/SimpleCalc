@@ -46,16 +46,23 @@
     flex-wrap: wrap;
     flex-direction: column;
     margin-bottom: 20px;
+
 }
 
 .Sets button {
     width: 60px;
     height: 50px;
+    font-size: 20px;
 
 }
 .Functional button {
     width: 50px;
     height: 60px;
     margin: 5px;
+    font-size: 20px;
+}
+
+.PlusAndEqual button {
+    height: 130px;
 }
 
