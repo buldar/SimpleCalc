@@ -1,18 +1,47 @@
 import React, {useState} from 'react';
 import './App.css';
 
+type RoundingType = 'mathematical'|'down'|'up'
+type DecimalType = '0'|'1'|'2'|'3'|'F'
+
 export const App = () => {
 
-    let [display, setDisplay] = useState('0')
+    let [displayValue, setDisplayValue] = useState<string>('0')
+    let [power, setPower] = useState<boolean>(true)
+    let [roundingMode, setRoundingMode]=useState<RoundingType>('mathematical')
+    let [decimalPlace, setDecimalPlace]=useState<DecimalType>('2')
+    let [memoryMod, setMemoryMod]=useState<boolean>(false)
+    let [memoryValue, setMemoryValue] = useState<number|null>(null)
 
+
+    const onOff = () => {
+        setPower(!power)
+    }
+    const changeRounding = (value:RoundingType) => {
+        setRoundingMode(value)
+    }
+    const changeDecimalPlace = (value:DecimalType) => {
+        setDecimalPlace(value)
+    }
+    const addValue = (value:string) => {
+        if (displayValue==='0') {
+            setDisplayValue('1')
+        }
+        let newValue=displayValue+value
+        setDisplayValue(newValue)
+    }
 
     return (
         <div className="App">
             <div className='Tittle'><h1>I AM SIMPLE CALCULATOR</h1></div>
             <div className='Calc'>
-                <div className='Display'>
-                    <span>{display}</span>
-                </div>
+                {power?
+                    <div className='Display'>
+                        <span>{displayValue}</span>
+                    </div>
+                    :
+                    <div className='Hello'>Hello! Press 'ON' to start.</div>
+                }
                 <div className='Sets'>
                     <div className='RoundAndDoz'>
                         <div className='Indicators'>
@@ -21,26 +50,42 @@ export const App = () => {
                             <div>↑</div>
                         </div>
                         <div>
-                            <button/>
-                            <button/>
-                            <button/>
+                            <button className={roundingMode==='down'?'Chosen':''}
+                                    onClick={()=>changeRounding('down')}
+                            />
+                            <button className={roundingMode==='mathematical'?'Chosen':''}
+                                    onClick={()=>changeRounding('mathematical')}
+                            />
+                            <button className={roundingMode==='up'?'Chosen':''}
+                                    onClick={()=>changeRounding('up')}
+                            />
                         </div>
                     </div>
-                    <div className='OnOff'><button>ON</button></div>
+                    <div className='OnOff'><button onClick={onOff}>ON</button></div>
                     <div className='RoundAndDoz'>
                         <div className='Indicators'>
-                            <div>A</div>
                             <div>0</div>
+                            <div>1</div>
                             <div>2</div>
                             <div>3</div>
                             <div>F</div>
                         </div>
                         <div>
-                            <button/>
-                            <button/>
-                            <button/>
-                            <button/>
-                            <button/>
+                            <button className={decimalPlace==='0'?'Chosen':''}
+                                    onClick={()=>changeDecimalPlace('0')}
+                            />
+                            <button className={decimalPlace==='1'?'Chosen':''}
+                                    onClick={()=>changeDecimalPlace('1')}
+                            />
+                            <button className={decimalPlace==='2'?'Chosen':''}
+                                    onClick={()=>changeDecimalPlace('2')}
+                            />
+                            <button className={decimalPlace==='3'?'Chosen':''}
+                                    onClick={()=>changeDecimalPlace('3')}
+                            />
+                            <button className={decimalPlace==='F'?'Chosen':''}
+                                    onClick={()=>changeDecimalPlace('F')}
+                            />
                         </div>
                     </div>
                 </div>
@@ -51,19 +96,19 @@ export const App = () => {
                     <div><button>C</button></div>
                     <div><button>CE</button></div>
                     <div><button>MR</button></div>
-                    <div><button>7</button></div>
-                    <div><button>4</button></div>
-                    <div><button>1</button></div>
-                    <div><button>0</button></div>
+                    <div><button onClick={()=>addValue('7')}>7</button></div>
+                    <div><button onClick={()=>addValue('4')}>4</button></div>
+                    <div><button onClick={()=>addValue('1')}>1</button></div>
+                    <div><button onClick={()=>addValue('0')}>0</button></div>
                     <div><button>M-</button></div>
-                    <div><button>8</button></div>
-                    <div><button>5</button></div>
-                    <div><button>2</button></div>
+                    <div><button onClick={()=>addValue('8')}>8</button></div>
+                    <div><button onClick={()=>addValue('5')}>5</button></div>
+                    <div><button onClick={()=>addValue('2')}>2</button></div>
                     <div><button>00</button></div>
                     <div><button>M+</button></div>
-                    <div><button>9</button></div>
-                    <div><button>6</button></div>
-                    <div><button>3</button></div>
+                    <div><button onClick={()=>addValue('9')}>9</button></div>
+                    <div><button onClick={()=>addValue('6')}>6</button></div>
+                    <div><button onClick={()=>addValue('3')}>3</button></div>
                     <div><button>.</button></div>
                     <div><button>√</button></div>
                     <div><button>÷</button></div>

@@ -26,6 +26,15 @@
     text-align: end;
 }
 
+.Hello {
+    border: blue dotted 2px;
+    height: 110px;
+    width: 350px;
+    margin-top: 20px;
+    font-size: 30px;
+    text-align: center;
+}
+
 
 
 .Sets {
@@ -82,5 +91,9 @@
 .OnOff button {
     border-radius: 50%;
     margin-left: 40px;
+}
+
+.Chosen {
+    background-color: greenyellow;
 }
 
