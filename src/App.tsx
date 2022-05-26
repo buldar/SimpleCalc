@@ -1,46 +1,102 @@
 import React, {useState} from 'react';
 import './App.css';
 
-type RoundingType = 'mathematical'|'down'|'up'
-type DecimalType = '0'|'1'|'2'|'3'|'F'
+type RoundingType = 'mathematical' | 'down' | 'up'
+type DecimalType = '0' | '1' | '2' | '3' | 'F'
+
+let currentVal:number|null = null
+// let currentMath = ''
+let toZero = true
+let lastNumber = 0
+let lastKey = ''
 
 export const App = () => {
 
     let [displayValue, setDisplayValue] = useState<string>('0')
     let [power, setPower] = useState<boolean>(true)
-    let [roundingMode, setRoundingMode]=useState<RoundingType>('mathematical')
-    let [decimalPlace, setDecimalPlace]=useState<DecimalType>('2')
-    let [memoryMod, setMemoryMod]=useState<boolean>(false)
-    let [memoryValue, setMemoryValue] = useState<number|null>(null)
+    let [roundingMode, setRoundingMode] = useState<RoundingType>('mathematical')
+    let [decimalPlace, setDecimalPlace] = useState<DecimalType>('2')
+    // let [memoryMod, setMemoryMod] = useState<boolean>(false)
+    // let [memoryValue, setMemoryValue] = useState<number | null>(null)
 
 
     const onOff = () => {
         setPower(!power)
+        if (power) {
+            setDisplayValue('0')
+        }
     }
-    const changeRounding = (value:RoundingType) => {
+    const changeRounding = (value: RoundingType) => {
         setRoundingMode(value)
     }
-    const changeDecimalPlace = (value:DecimalType) => {
+    const changeDecimalPlace = (value: DecimalType) => {
         setDecimalPlace(value)
     }
-    const addValue = (value:string) => {
-        if (displayValue==='0') {
-            setDisplayValue('1')
+    const addValue = (value: string) => {
+        if (displayValue.length < 10) {
+            if (toZero) {
+                setDisplayValue(displayValue = value)
+                toZero = false
+            } else {
+                setDisplayValue(displayValue = displayValue + value)
+            }
         }
-        let newValue=displayValue+value
-        setDisplayValue(newValue)
+        lastKey = 'numberOrDot'
+    }
+    const dot = () => {
+        if (displayValue.length > 10) {
+
+        } else if (displayValue.indexOf('.') === -1) {
+            setDisplayValue(displayValue + '.')
+        }
+    }
+    const clearDisplay = () => {
+        setDisplayValue('0')
+    }
+    const calculation = (value:string) => {
+        lastKey=value
+        if(value==='plus') {
+
+
+        }
+
+
+
+        // if (currentMath === '') {
+        //     currentVal = Number(displayValue)
+        //     currentMath = 'plus'
+        //     lastNumber = Number(displayValue)
+        //     lastKey = 'plus'
+        // } else if (currentMath === 'plus'  && lastKey != 'plus') {
+        //     lastNumber = Number(displayValue)
+        //     currentVal = currentVal + lastNumber
+        //     setDisplayValue(displayValue = currentVal.toString())
+        //     lastKey = 'plus'
+        // }
+        // toZero=true
+    }
+    const equalButton = () => {
+        // if (currentMath === 'plus' && lastKey!='plus') {
+        //     lastNumber = Number(displayValue)
+        //     currentVal = currentVal + lastNumber
+        //     setDisplayValue(displayValue = currentVal.toString())
+        //     currentMath = 'equalPlus'
+        //     lastKey='equal'
+        // } else if (currentMath === 'equalPlus' && lastKey!='plus') {
+        //     setDisplayValue(displayValue = (Number(displayValue) + lastNumber).toString())
+        //     lastKey='equal'
+        // }
     }
 
     return (
         <div className="App">
             <div className='Tittle'><h1>I AM SIMPLE CALCULATOR</h1></div>
             <div className='Calc'>
-                {power?
-                    <div className='Display'>
+                {power
+                    ? <div className='Display'>
                         <span>{displayValue}</span>
                     </div>
-                    :
-                    <div className='Hello'>Hello! Press 'ON' to start.</div>
+                    : <div className='Hello'>Hello! Press 'ON' to start.</div>
                 }
                 <div className='Sets'>
                     <div className='RoundAndDoz'>
@@ -50,18 +106,20 @@ export const App = () => {
                             <div>↑</div>
                         </div>
                         <div>
-                            <button className={roundingMode==='down'?'Chosen':''}
-                                    onClick={()=>changeRounding('down')}
+                            <button className={roundingMode === 'down' ? 'Chosen' : ''}
+                                    onClick={() => changeRounding('down')}
                             />
-                            <button className={roundingMode==='mathematical'?'Chosen':''}
-                                    onClick={()=>changeRounding('mathematical')}
+                            <button className={roundingMode === 'mathematical' ? 'Chosen' : ''}
+                                    onClick={() => changeRounding('mathematical')}
                             />
-                            <button className={roundingMode==='up'?'Chosen':''}
-                                    onClick={()=>changeRounding('up')}
+                            <button className={roundingMode === 'up' ? 'Chosen' : ''}
+                                    onClick={() => changeRounding('up')}
                             />
                         </div>
                     </div>
-                    <div className='OnOff'><button onClick={onOff}>ON</button></div>
+                    <div className='OnOff'>
+                        <button onClick={onOff}>ON</button>
+                    </div>
                     <div className='RoundAndDoz'>
                         <div className='Indicators'>
                             <div>0</div>
@@ -71,53 +129,109 @@ export const App = () => {
                             <div>F</div>
                         </div>
                         <div>
-                            <button className={decimalPlace==='0'?'Chosen':''}
-                                    onClick={()=>changeDecimalPlace('0')}
+                            <button className={decimalPlace === '0' ? 'Chosen' : ''}
+                                    onClick={() => changeDecimalPlace('0')}
                             />
-                            <button className={decimalPlace==='1'?'Chosen':''}
-                                    onClick={()=>changeDecimalPlace('1')}
+                            <button className={decimalPlace === '1' ? 'Chosen' : ''}
+                                    onClick={() => changeDecimalPlace('1')}
                             />
-                            <button className={decimalPlace==='2'?'Chosen':''}
-                                    onClick={()=>changeDecimalPlace('2')}
+                            <button className={decimalPlace === '2' ? 'Chosen' : ''}
+                                    onClick={() => changeDecimalPlace('2')}
                             />
-                            <button className={decimalPlace==='3'?'Chosen':''}
-                                    onClick={()=>changeDecimalPlace('3')}
+                            <button className={decimalPlace === '3' ? 'Chosen' : ''}
+                                    onClick={() => changeDecimalPlace('3')}
                             />
-                            <button className={decimalPlace==='F'?'Chosen':''}
-                                    onClick={()=>changeDecimalPlace('F')}
+                            <button className={decimalPlace === 'F' ? 'Chosen' : ''}
+                                    onClick={() => changeDecimalPlace('F')}
                             />
                         </div>
                     </div>
                 </div>
                 <div className='Functional'>
-                    <div><button>MC</button></div>
-                    <div><button>+/-</button></div>
-                    <div><button>→</button></div>
-                    <div><button>C</button></div>
-                    <div><button>CE</button></div>
-                    <div><button>MR</button></div>
-                    <div><button onClick={()=>addValue('7')}>7</button></div>
-                    <div><button onClick={()=>addValue('4')}>4</button></div>
-                    <div><button onClick={()=>addValue('1')}>1</button></div>
-                    <div><button onClick={()=>addValue('0')}>0</button></div>
-                    <div><button>M-</button></div>
-                    <div><button onClick={()=>addValue('8')}>8</button></div>
-                    <div><button onClick={()=>addValue('5')}>5</button></div>
-                    <div><button onClick={()=>addValue('2')}>2</button></div>
-                    <div><button>00</button></div>
-                    <div><button>M+</button></div>
-                    <div><button onClick={()=>addValue('9')}>9</button></div>
-                    <div><button onClick={()=>addValue('6')}>6</button></div>
-                    <div><button onClick={()=>addValue('3')}>3</button></div>
-                    <div><button>.</button></div>
-                    <div><button>√</button></div>
-                    <div><button>÷</button></div>
-                    <div><button>x</button></div>
-                    <div className='PlusAndEqual'><button>+</button></div>
-                    <div><button>x<sup>y</sup></button></div>
-                    <div><button>%</button></div>
-                    <div><button>-</button></div>
-                    <div className='PlusAndEqual'><button>=</button></div>
+                    <div>
+                        <button>MC</button>
+                    </div>
+                    <div>
+                        <button>+/-</button>
+                    </div>
+                    <div>
+                        <button>→</button>
+                    </div>
+                    <div>
+                        <button onClick={clearDisplay}>C</button>
+                    </div>
+                    <div>
+                        <button>CE</button>
+                    </div>
+                    <div>
+                        <button>MR</button>
+                    </div>
+                    <div>
+                        <button onClick={() => addValue('7')}>7</button>
+                    </div>
+                    <div>
+                        <button onClick={() => addValue('4')}>4</button>
+                    </div>
+                    <div>
+                        <button onClick={() => addValue('1')}>1</button>
+                    </div>
+                    <div>
+                        <button onClick={() => addValue('0')}>0</button>
+                    </div>
+                    <div>
+                        <button>M-</button>
+                    </div>
+                    <div>
+                        <button onClick={() => addValue('8')}>8</button>
+                    </div>
+                    <div>
+                        <button onClick={() => addValue('5')}>5</button>
+                    </div>
+                    <div>
+                        <button onClick={() => addValue('2')}>2</button>
+                    </div>
+                    <div>
+                        <button>00</button>
+                    </div>
+                    <div>
+                        <button>M+</button>
+                    </div>
+                    <div>
+                        <button onClick={() => addValue('9')}>9</button>
+                    </div>
+                    <div>
+                        <button onClick={() => addValue('6')}>6</button>
+                    </div>
+                    <div>
+                        <button onClick={() => addValue('3')}>3</button>
+                    </div>
+                    <div>
+                        <button onClick={dot}>.</button>
+                    </div>
+                    <div>
+                        <button>√</button>
+                    </div>
+                    <div>
+                        <button>÷</button>
+                    </div>
+                    <div>
+                        <button>x</button>
+                    </div>
+                    <div className='PlusAndEqual'>
+                        <button onClick={()=>calculation('plus')}>+</button>
+                    </div>
+                    <div>
+                        <button>x<sup>y</sup></button>
+                    </div>
+                    <div>
+                        <button>%</button>
+                    </div>
+                    <div>
+                        <button>-</button>
+                    </div>
+                    <div className='PlusAndEqual'>
+                        <button onClick={equalButton}>=</button>
+                    </div>
                 </div>
             </div>
 
