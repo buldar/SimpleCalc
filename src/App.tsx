@@ -71,24 +71,39 @@ export const App = () => {
     }
 
 
-    const plusButtonPress = () => {
-        if (mathDone) {
-            currentVal = Number(displayValue)
-        } else {
-            if (lastKey !== 'math' && lastKey !== 'equal') {
-                lastNumber = Number(displayValue)
-                let value = Number(displayValue)
-                calculate(currentMath, value)
-            }
-        }
-        mathDone = false
-        toZero = true
-        lastKey = 'math'
-        currentMath = 'plus'
-        // lastNumber=Number(displayValue) // this logic like many others i dont like
-    }
+    // const plusButtonPress = () => {
+    //     if (mathDone) {
+    //         currentVal = Number(displayValue)
+    //     } else {
+    //         if (lastKey !== 'math' && lastKey !== 'equal') {
+    //             lastNumber = Number(displayValue)
+    //             let value = Number(displayValue)
+    //             calculate(currentMath, value)
+    //         }
+    //     }
+    //     mathDone = false
+    //     toZero = true
+    //     lastKey = 'math'
+    //     currentMath = 'plus'
+    //     // lastNumber=Number(displayValue) // this logic like many others i dont like
+    // }
+    // const minusButtonPress = () => {
+    //     if (mathDone) {
+    //         currentVal = Number(displayValue)
+    //     } else {
+    //         if (lastKey !== 'math' && lastKey !== 'equal') {
+    //             lastNumber = Number(displayValue)
+    //             let value = Number(displayValue)
+    //             calculate(currentMath, value)
+    //         }
+    //     }
+    //     mathDone = false
+    //     toZero = true
+    //     lastKey = 'math'
+    //     currentMath = 'minus'
+    // }
 
-    const minusButtonPress = () => {
+    const mathButtonsFunc = (mathType:string)=> {
         if (mathDone) {
             currentVal = Number(displayValue)
         } else {
@@ -101,7 +116,7 @@ export const App = () => {
         mathDone = false
         toZero = true
         lastKey = 'math'
-        currentMath = 'minus'
+        currentMath = mathType
     }
 
 
@@ -243,7 +258,7 @@ export const App = () => {
                         <button>x</button>
                     </div>
                     <div className='PlusAndEqual'>
-                        <button onClick={plusButtonPress}>+</button>
+                        <button onClick={()=>mathButtonsFunc('plus')}>+</button>
                     </div>
                     <div>
                         <button>x<sup>y</sup></button>
@@ -252,7 +267,7 @@ export const App = () => {
                         <button>%</button>
                     </div>
                     <div>
-                        <button onClick={minusButtonPress}>-</button>
+                        <button onClick={()=>mathButtonsFunc('minus')}>-</button>
                     </div>
                     <div className='PlusAndEqual'>
                         <button onClick={equalButtonPress}>=</button>
