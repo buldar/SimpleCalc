@@ -27,6 +27,11 @@ export const App = () => {
         setPower(!power)
         setDisplayValue('0')
         toZero = true
+        currentVal=0
+        lastNumber=null
+        currentMath=''
+        mathDone=true
+        lastKey=''
     }
     const changeRounding = (value: RoundingType) => {
         setRoundingMode(value)
@@ -35,8 +40,13 @@ export const App = () => {
         setDecimalPlace(value)
     }
     const addValue = (value: string) => {
+        if (lastKey==='equal') {
+            currentVal=0
+            lastNumber=null
+            mathDone=true
+        }
         if (displayValue.length < 10) {
-            if (toZero) {
+            if (toZero || lastKey==='equal') {
                 setDisplayValue(displayValue = value)
                 toZero = false
             } else {
@@ -60,16 +70,28 @@ export const App = () => {
     }
 
     const calculate = (mathType: string, value: number) => {
-        debugger
-        if (mathType === 'plus') {
-            currentVal = currentVal + value
-            setDisplayValue(currentVal.toString())
-        } else if (mathType === 'minus') {
-            currentVal = currentVal - value
-            setDisplayValue(currentVal.toString())
-        }
-    }
+        switch (mathType) {
+            case 'plus':
+                currentVal = currentVal + value
+                break
+            case 'minus':
+                currentVal = currentVal - value
+                break
+            case 'multiply':
+                currentVal = currentVal * value
+                break
+            case 'divide':
+                currentVal=currentVal/value
+                break
+            case 'radical':
+                currentVal=Math.pow(currentVal,1/value)
+                break
+            default:
+                alert('omg! u rly did a mistake here? pfffff...')
 
+        }
+        setDisplayValue(currentVal.toString())
+    }
 
     // const plusButtonPress = () => {
     //     if (mathDone) {
@@ -249,13 +271,13 @@ export const App = () => {
                         <button onClick={dot}>.</button>
                     </div>
                     <div>
-                        <button>√</button>
+                        <button onClick={()=>mathButtonsFunc('radical')}>√<sup>y</sup></button>
                     </div>
                     <div>
-                        <button>÷</button>
+                        <button onClick={()=>mathButtonsFunc('divide')}>÷</button>
                     </div>
                     <div>
-                        <button>x</button>
+                        <button onClick={()=>mathButtonsFunc('multiply')}>x</button>
                     </div>
                     <div className='PlusAndEqual'>
                         <button onClick={()=>mathButtonsFunc('plus')}>+</button>
