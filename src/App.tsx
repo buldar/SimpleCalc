@@ -4,10 +4,13 @@ import './App.css';
 type RoundingType = 'mathematical' | 'down' | 'up'
 type DecimalType = '0' | '1' | '2' | '3' | 'F'
 
-let currentVal:number|null = null
-// let currentMath = ''
+let currentVal: number = 0
+let lastNumber: any = undefined //any...
+
+let currentMath = ''
+let mathDone: boolean = true
+
 let toZero = true
-let lastNumber = 0
 let lastKey = ''
 
 export const App = () => {
@@ -22,9 +25,8 @@ export const App = () => {
 
     const onOff = () => {
         setPower(!power)
-        if (power) {
-            setDisplayValue('0')
-        }
+        setDisplayValue('0')
+        toZero = true
     }
     const changeRounding = (value: RoundingType) => {
         setRoundingMode(value)
@@ -41,7 +43,8 @@ export const App = () => {
                 setDisplayValue(displayValue = displayValue + value)
             }
         }
-        lastKey = 'numberOrDot'
+        lastNumber = Number(displayValue)
+        lastKey = 'number'
     }
     const dot = () => {
         if (displayValue.length > 10) {
@@ -52,40 +55,62 @@ export const App = () => {
     }
     const clearDisplay = () => {
         setDisplayValue('0')
+        currentVal = 0
+        toZero = true
     }
-    const calculation = (value:string) => {
-        lastKey=value
-        if(value==='plus') {
 
-
+    const calculate = (mathType: string, value: number) => {
+        debugger
+        if (mathType === 'plus') {
+            currentVal = currentVal + value
+            setDisplayValue(currentVal.toString())
+        } else if (mathType === 'minus') {
+            currentVal = currentVal - value
+            setDisplayValue(currentVal.toString())
         }
-
-
-
-        // if (currentMath === '') {
-        //     currentVal = Number(displayValue)
-        //     currentMath = 'plus'
-        //     lastNumber = Number(displayValue)
-        //     lastKey = 'plus'
-        // } else if (currentMath === 'plus'  && lastKey != 'plus') {
-        //     lastNumber = Number(displayValue)
-        //     currentVal = currentVal + lastNumber
-        //     setDisplayValue(displayValue = currentVal.toString())
-        //     lastKey = 'plus'
-        // }
-        // toZero=true
     }
-    const equalButton = () => {
-        // if (currentMath === 'plus' && lastKey!='plus') {
-        //     lastNumber = Number(displayValue)
-        //     currentVal = currentVal + lastNumber
-        //     setDisplayValue(displayValue = currentVal.toString())
-        //     currentMath = 'equalPlus'
-        //     lastKey='equal'
-        // } else if (currentMath === 'equalPlus' && lastKey!='plus') {
-        //     setDisplayValue(displayValue = (Number(displayValue) + lastNumber).toString())
-        //     lastKey='equal'
-        // }
+
+
+    const plusButtonPress = () => {
+        if (mathDone) {
+            currentVal = Number(displayValue)
+        } else {
+            if (lastKey !== 'math' && lastKey !== 'equal') {
+                lastNumber = Number(displayValue)
+                let value = Number(displayValue)
+                calculate(currentMath, value)
+            }
+        }
+        mathDone = false
+        toZero = true
+        lastKey = 'math'
+        currentMath = 'plus'
+        // lastNumber=Number(displayValue) // this logic like many others i dont like
+    }
+
+    const minusButtonPress = () => {
+        if (mathDone) {
+            currentVal = Number(displayValue)
+        } else {
+            if (lastKey !== 'math' && lastKey !== 'equal') {
+                lastNumber = Number(displayValue)
+                let value = Number(displayValue)
+                calculate(currentMath, value)
+            }
+        }
+        mathDone = false
+        toZero = true
+        lastKey = 'math'
+        currentMath = 'minus'
+    }
+
+
+
+    const equalButtonPress = () => {
+        if (!mathDone) {
+            calculate(currentMath, lastNumber)
+        }
+        lastKey = 'equal'
     }
 
     return (
@@ -218,7 +243,7 @@ export const App = () => {
                         <button>x</button>
                     </div>
                     <div className='PlusAndEqual'>
-                        <button onClick={()=>calculation('plus')}>+</button>
+                        <button onClick={plusButtonPress}>+</button>
                     </div>
                     <div>
                         <button>x<sup>y</sup></button>
@@ -227,10 +252,10 @@ export const App = () => {
                         <button>%</button>
                     </div>
                     <div>
-                        <button>-</button>
+                        <button onClick={minusButtonPress}>-</button>
                     </div>
                     <div className='PlusAndEqual'>
-                        <button onClick={equalButton}>=</button>
+                        <button onClick={equalButtonPress}>=</button>
                     </div>
                 </div>
             </div>
