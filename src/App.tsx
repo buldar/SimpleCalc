@@ -3,15 +3,16 @@ import './App.css';
 
 type RoundingType = 'mathematical' | 'down' | 'up'
 type DecimalType = '0' | '1' | '2' | '3' | 'F'
+type MemoryType = 'increase' | 'decrease' | 'clear' | 'use'
 
 let currentVal: number = 0
 let lastNumber: any = undefined //any...
+let currentMath: string = ''
+let operationIsDone: boolean = true
+let toZero: boolean = true
+let lastPressedKey: string = ''
+let memoryValue: number = 0
 
-let currentMath = ''
-let mathDone: boolean = true
-
-let toZero = true
-let lastKey = ''
 
 export const App = () => {
 
@@ -20,18 +21,17 @@ export const App = () => {
     let [roundingMode, setRoundingMode] = useState<RoundingType>('mathematical')
     let [decimalPlace, setDecimalPlace] = useState<DecimalType>('2')
     // let [memoryMod, setMemoryMod] = useState<boolean>(false)
-    // let [memoryValue, setMemoryValue] = useState<number | null>(null)
 
 
     const onOff = () => {
         setPower(!power)
         setDisplayValue('0')
         toZero = true
-        currentVal=0
-        lastNumber=null
-        currentMath=''
-        mathDone=true
-        lastKey=''
+        currentVal = 0
+        lastNumber = null
+        currentMath = ''
+        operationIsDone = true
+        lastPressedKey = ''
     }
     const changeRounding = (value: RoundingType) => {
         setRoundingMode(value)
@@ -40,13 +40,13 @@ export const App = () => {
         setDecimalPlace(value)
     }
     const addValue = (value: string) => {
-        if (lastKey==='equal') {
-            currentVal=0
-            lastNumber=null
-            mathDone=true
+        if (lastPressedKey === 'equal') {
+            currentVal = 0
+            lastNumber = null
+            operationIsDone = true
         }
         if (displayValue.length < 10) {
-            if (toZero || lastKey==='equal') {
+            if (toZero || lastPressedKey === 'equal') {
                 setDisplayValue(displayValue = value)
                 toZero = false
             } else {
@@ -54,7 +54,7 @@ export const App = () => {
             }
         }
         lastNumber = Number(displayValue)
-        lastKey = 'number'
+        lastPressedKey = 'number'
     }
     const dot = () => {
         if (displayValue.length > 10) {
@@ -69,6 +69,20 @@ export const App = () => {
         toZero = true
     }
 
+    // const memoryOperations = (set: MemoryType) => {
+    //     switch (set) {
+    //         case 'use':
+    //             break
+    //         case 'increase':
+    //             break
+    //         case "decrease":
+    //             break
+    //         case "clear":
+    //             break
+    //         default:
+    //             alert('i dont know how, but u are here')
+    //     }
+    // }
     const calculate = (mathType: string, value: number) => {
         switch (mathType) {
             case 'plus':
@@ -81,10 +95,13 @@ export const App = () => {
                 currentVal = currentVal * value
                 break
             case 'divide':
-                currentVal=currentVal/value
+                currentVal = currentVal / value
                 break
             case 'radical':
-                currentVal=Math.pow(currentVal,1/value)
+                currentVal = Math.pow(currentVal, 1 / value)
+                break
+            case 'degree':
+                currentVal = Math.pow(currentVal, value)
                 break
             default:
                 alert('omg! u rly did a mistake here? pfffff...')
@@ -92,62 +109,51 @@ export const App = () => {
         }
         setDisplayValue(currentVal.toString())
     }
-
-    // const plusButtonPress = () => {
-    //     if (mathDone) {
-    //         currentVal = Number(displayValue)
-    //     } else {
-    //         if (lastKey !== 'math' && lastKey !== 'equal') {
-    //             lastNumber = Number(displayValue)
-    //             let value = Number(displayValue)
-    //             calculate(currentMath, value)
-    //         }
-    //     }
-    //     mathDone = false
-    //     toZero = true
-    //     lastKey = 'math'
-    //     currentMath = 'plus'
-    //     // lastNumber=Number(displayValue) // this logic like many others i dont like
-    // }
-    // const minusButtonPress = () => {
-    //     if (mathDone) {
-    //         currentVal = Number(displayValue)
-    //     } else {
-    //         if (lastKey !== 'math' && lastKey !== 'equal') {
-    //             lastNumber = Number(displayValue)
-    //             let value = Number(displayValue)
-    //             calculate(currentMath, value)
-    //         }
-    //     }
-    //     mathDone = false
-    //     toZero = true
-    //     lastKey = 'math'
-    //     currentMath = 'minus'
-    // }
-
-    const mathButtonsFunc = (mathType:string)=> {
-        if (mathDone) {
+    const mathButtonsFunc = (mathType: string) => {
+        lastNumber = Number(displayValue) //logic to save display value as value for next operation. need test
+        if (operationIsDone) {
             currentVal = Number(displayValue)
         } else {
-            if (lastKey !== 'math' && lastKey !== 'equal') {
+            if (lastPressedKey !== 'math' && lastPressedKey !== 'equal') {
                 lastNumber = Number(displayValue)
                 let value = Number(displayValue)
                 calculate(currentMath, value)
             }
         }
-        mathDone = false
+        operationIsDone = false
         toZero = true
-        lastKey = 'math'
+        lastPressedKey = 'math'
         currentMath = mathType
     }
-
-
-
     const equalButtonPress = () => {
-        if (!mathDone) {
+        if (!operationIsDone) {
             calculate(currentMath, lastNumber)
+        } else {
+            setDisplayValue(currentVal.toString())
         }
-        lastKey = 'equal'
+        lastPressedKey = 'equal'
+    }
+
+    const clearButtons = (set:string) => {
+        setDisplayValue('0')
+        currentMath=''
+        toZero=true
+        lastPressedKey=''
+        switch (set) {
+            case 'CE':
+                break
+            case 'C':
+                operationIsDone=true
+                currentVal=0
+                break
+            case 'OnOff':
+                currentVal=0
+                operationIsDone=true
+                setPower(!power)
+                break
+            default:
+                alert('u make a mistake here')
+        }
     }
 
     return (
@@ -180,7 +186,7 @@ export const App = () => {
                         </div>
                     </div>
                     <div className='OnOff'>
-                        <button onClick={onOff}>ON</button>
+                        <button onClick={()=>clearButtons('OnOff')}>ON</button>
                     </div>
                     <div className='RoundAndDoz'>
                         <div className='Indicators'>
@@ -220,10 +226,10 @@ export const App = () => {
                         <button>→</button>
                     </div>
                     <div>
-                        <button onClick={clearDisplay}>C</button>
+                        <button onClick={()=>clearButtons('C')}>C</button>
                     </div>
                     <div>
-                        <button>CE</button>
+                        <button onClick={()=>clearButtons('CE')}>CE</button>
                     </div>
                     <div>
                         <button>MR</button>
@@ -271,25 +277,25 @@ export const App = () => {
                         <button onClick={dot}>.</button>
                     </div>
                     <div>
-                        <button onClick={()=>mathButtonsFunc('radical')}>√<sup>y</sup></button>
+                        <button onClick={() => mathButtonsFunc('radical')}>√<sup>y</sup></button>
                     </div>
                     <div>
-                        <button onClick={()=>mathButtonsFunc('divide')}>÷</button>
+                        <button onClick={() => mathButtonsFunc('divide')}>÷</button>
                     </div>
                     <div>
-                        <button onClick={()=>mathButtonsFunc('multiply')}>x</button>
+                        <button onClick={() => mathButtonsFunc('multiply')}>x</button>
                     </div>
                     <div className='PlusAndEqual'>
-                        <button onClick={()=>mathButtonsFunc('plus')}>+</button>
+                        <button onClick={() => mathButtonsFunc('plus')}>+</button>
                     </div>
                     <div>
-                        <button>x<sup>y</sup></button>
+                        <button onClick={()=>mathButtonsFunc('degree')}>x<sup>y</sup></button>
                     </div>
                     <div>
                         <button>%</button>
                     </div>
                     <div>
-                        <button onClick={()=>mathButtonsFunc('minus')}>-</button>
+                        <button onClick={() => mathButtonsFunc('minus')}>-</button>
                     </div>
                     <div className='PlusAndEqual'>
                         <button onClick={equalButtonPress}>=</button>
