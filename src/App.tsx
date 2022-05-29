@@ -89,7 +89,7 @@ export const App = () => {
                 currentVal = Math.pow(currentVal, value)
                 break
             default:
-                // alert('omg! u rly did a mistake here? pfffff...')
+            // alert('omg! u rly did a mistake here? pfffff...')
 
         }
         setDisplayValue(currentVal.toString())
@@ -110,34 +110,41 @@ export const App = () => {
         lastPressedKey = 'math'
         currentMath = mathType
     }
-    const equalButtonPress = () => {
+    const equalButtonPress = () => { //need change logic, coz +/- work not correctly
         if (!operationIsDone) {
+            if (lastPressedKey === 'changeSign') {
+                lastNumber = (0 - lastNumber)
+            }
             calculate(currentMath, lastNumber)
         } else {
             setDisplayValue(currentVal.toString())
         }
         lastPressedKey = 'equal'
     }
-    const clearButtons = (set:string) => {
+    const clearButtons = (set: string) => {
         setDisplayValue('0')
-        currentMath=''
-        toZero=true
-        lastPressedKey=''
+        currentMath = ''
+        toZero = true
+        lastPressedKey = ''
         switch (set) {
             case 'CE':
                 break
             case 'C':
-                operationIsDone=true
-                currentVal=0
+                operationIsDone = true
+                currentVal = 0
                 break
             case 'OnOff':
-                currentVal=0
-                operationIsDone=true
+                currentVal = 0
+                operationIsDone = true
                 setPower(!power)
                 break
             default:
                 alert('u make a mistake here')
         }
+    }
+    const changeSingButton = () => {
+        setDisplayValue((0 - Number(displayValue)).toString())
+        lastPressedKey = 'changeSign'
     }
 
     return (
@@ -172,7 +179,7 @@ export const App = () => {
                         </div>
                     </div>
                     <div className='OnOff'>
-                        <button onClick={()=>clearButtons('OnOff')}>ON</button>
+                        <button onClick={() => clearButtons('OnOff')}>ON</button>
                     </div>
                     <div className='RoundAndDoz'>
                         <div className='Indicators'>
@@ -206,16 +213,16 @@ export const App = () => {
                         <button>MC</button>
                     </div>
                     <div>
-                        <button>+/-</button>
+                        <button onClick={changeSingButton}>+/-</button>
                     </div>
                     <div>
                         <button>→</button>
                     </div>
                     <div>
-                        <button onClick={()=>clearButtons('C')}>C</button>
+                        <button onClick={() => clearButtons('C')}>C</button>
                     </div>
                     <div>
-                        <button onClick={()=>clearButtons('CE')}>CE</button>
+                        <button onClick={() => clearButtons('CE')}>CE</button>
                     </div>
                     <div>
                         <button>MR</button>
@@ -275,7 +282,7 @@ export const App = () => {
                         <button onClick={() => mathButtonsFunc('plus')}>+</button>
                     </div>
                     <div>
-                        <button onClick={()=>mathButtonsFunc('degree')}>x<sup>y</sup></button>
+                        <button onClick={() => mathButtonsFunc('degree')}>x<sup>y</sup></button>
                     </div>
                     <div>
                         <button>%</button>
