@@ -23,16 +23,6 @@ export const App = () => {
     // let [memoryMod, setMemoryMod] = useState<boolean>(false)
 
 
-    const onOff = () => {
-        setPower(!power)
-        setDisplayValue('0')
-        toZero = true
-        currentVal = 0
-        lastNumber = null
-        currentMath = ''
-        operationIsDone = true
-        lastPressedKey = ''
-    }
     const changeRounding = (value: RoundingType) => {
         setRoundingMode(value)
     }
@@ -62,11 +52,6 @@ export const App = () => {
         } else if (displayValue.indexOf('.') === -1) {
             setDisplayValue(displayValue + '.')
         }
-    }
-    const clearDisplay = () => {
-        setDisplayValue('0')
-        currentVal = 0
-        toZero = true
     }
 
     // const memoryOperations = (set: MemoryType) => {
@@ -104,7 +89,7 @@ export const App = () => {
                 currentVal = Math.pow(currentVal, value)
                 break
             default:
-                alert('omg! u rly did a mistake here? pfffff...')
+                // alert('omg! u rly did a mistake here? pfffff...')
 
         }
         setDisplayValue(currentVal.toString())
@@ -133,7 +118,6 @@ export const App = () => {
         }
         lastPressedKey = 'equal'
     }
-
     const clearButtons = (set:string) => {
         setDisplayValue('0')
         currentMath=''
@@ -162,7 +146,9 @@ export const App = () => {
             <div className='Calc'>
                 {power
                     ? <div className='Display'>
-                        <span>{displayValue}</span>
+                        {/*display will be fixed after. With React Hooks for redrawing.*/}
+                        {/*<div className='SetsOnDisplay'>{currentVal+' '+currentMath}</div>*/}
+                        <div><span>{displayValue.length > 10 ? "Can't count it" : displayValue}</span></div>
                     </div>
                     : <div className='Hello'>Hello! Press 'ON' to start.</div>
                 }
